@@ -10,7 +10,7 @@ export const metadata: Metadata = {
     title: "Create A New Note",
     description:
       "Organize your thoughts, tasks, and ideas in one place. NoteHub helps you create, filter, and manage your personal and work notes effectively with modern speed.",
-    url: "https://08-zustand-one-azure.vercel.app",
+    url: "https://08-zustand-one-azure.vercel.app/notes/action/create",
     images: [
       {
         url: "https://ac.goit.global/fullstack/react/notehub-og-meta.jpg",

@@ -2,7 +2,7 @@
 
 import css from "./NoteForm.module.css";
 import type { NewNoteBody } from "../../types/note";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import toast from "react-hot-toast";
 import { useId } from "react";
 import { createNote } from "@/lib/api";
@@ -12,6 +12,7 @@ import { useNoteDraftStore } from "@/lib/store/noteStore";
 const NoteForm = () => {
   const router = useRouter();
   const fieldId = useId();
+  const queryClient = useQueryClient();
 
   const { draft, setDraft, clearDraft } = useNoteDraftStore();
 
@@ -29,6 +30,7 @@ const NoteForm = () => {
   const { mutate, isPending } = useMutation({
     mutationFn: (newNote: NewNoteBody) => createNote(newNote),
     onSuccess: async () => {
+      await queryClient.invalidateQueries({ queryKey: ["notes"] });
       clearDraft();
       toast.success("Note created successfully!");
       router.push("/notes/filter/all");
