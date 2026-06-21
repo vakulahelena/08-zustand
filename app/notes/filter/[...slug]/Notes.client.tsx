@@ -7,12 +7,11 @@ import { useDebouncedCallback } from "use-debounce";
 import { Toaster } from "react-hot-toast";
 import SearchBox from "@/components/SearchBox/SearchBox";
 import NoteList from "@/components/NoteList/NoteList";
-import Modal from "@/components/Modal/Modal";
-import NoteForm from "@/components/NoteForm/NoteForm";
 import Pagination from "@/components/Pagination/Pagination";
 import Loader from "@/components/Loader/Loader";
 import { fetchNotes } from "@/lib/api";
 import { NoteTag } from "@/types/note";
+import Link from "next/link";
 
 interface NotesClientProps {
   tag?: string;
@@ -21,10 +20,6 @@ interface NotesClientProps {
 const NotesClient = ({ tag }: NotesClientProps) => {
   const [searchQuery, setSearchQuery] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
-  const [isModalOpen, setIsModalOpen] = useState(false);
-
-  const openModal = () => setIsModalOpen(true);
-  const closeModal = () => setIsModalOpen(false);
 
   const { data, isLoading, isError } = useQuery({
     queryKey: ["notes", searchQuery, currentPage, tag],
@@ -55,18 +50,11 @@ const NotesClient = ({ tag }: NotesClientProps) => {
             onPageChange={setCurrentPage}
           />
         )}
-        {
-          <button className={css.button} onClick={openModal}>
-            Create note +
-          </button>
-        }
+        <Link className={css.button} href={"/notes/action/create"}>
+          Create note +
+        </Link>
       </header>
       {notes.length > 0 && <NoteList notes={notes} />}
-      {isModalOpen && (
-        <Modal onClose={closeModal}>
-          <NoteForm onClose={closeModal}></NoteForm>
-        </Modal>
-      )}
       {isLoading && <Loader />}
       {isError && <p>Помилка завантаження нотаток</p>}
       <Toaster position="top-center" />
